@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import archiver from "archiver";
+import { ZipArchive } from "archiver";
 import { Readable } from "stream";
 import { getAdminDb } from "@/lib/firebaseAdmin";
 import { COLLECTION } from "@/lib/firebase";
@@ -7,13 +7,19 @@ import { COLLECTION } from "@/lib/firebase";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function normalizeEmail(v: string) {
+  return String(v || "").trim().toLowerCase();
+}
+
 function isAuthorized(req: NextRequest): boolean {
-  const expected = process.env.ADMIN_TOKEN;
+  const expected = normalizeEmail(process.env.ADMIN_EMAIL || "");
   if (!expected) return false;
   const header = req.headers.get("authorization") || "";
-  const cookieTok = req.cookies.get("admin_token")?.value || "";
-  const token = (header.startsWith("Bearer ") ? header.slice(7) : header) || cookieTok;
-  const a = Buffer.from(token);
+  const cookieEmail = req.cookies.get("admin_email")?.value || "";
+  const email = normalizeEmail(
+    (header.startsWith("Bearer ") ? header.slice(7) : header) || cookieEmail,
+  );
+  const a = Buffer.from(email);
   const b = Buffer.from(expected);
   if (a.length !== b.length) return false;
   let diff = 0;
@@ -39,7 +45,7 @@ export async function GET(req: NextRequest) {
   const db = getAdminDb();
   const snap = await db.collection(COLLECTION).orderBy("createdAt", "asc").get();
 
-  const archive = archiver("zip", { zlib: { level: 6 } });
+  const archive = new ZipArchive({ zlib: { level: 6 } });
   const manifestLines: string[] = [
     "Lidiya — farewell messages",
     `Exported: ${new Date().toISOString()}`,
