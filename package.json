@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@types/archiver": "^7.0.0",
-    "archiver": "^8.0.0",
+    "archiver": "^7.0.1",
     "firebase": "^10.13.2",
     "firebase-admin": "^13.10.0",
     "framer-motion": "^11.5.4",

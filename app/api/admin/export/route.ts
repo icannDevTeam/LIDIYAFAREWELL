@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ZipArchive } from "archiver";
+import archiver from "archiver";
 import { Readable } from "stream";
 import { getAdminDb } from "@/lib/firebaseAdmin";
 import { COLLECTION } from "@/lib/firebase";
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   const db = getAdminDb();
   const snap = await db.collection(COLLECTION).orderBy("createdAt", "asc").get();
 
-  const archive = new ZipArchive({ zlib: { level: 6 } });
+  const archive = archiver("zip", { zlib: { level: 6 } });
   const manifestLines: string[] = [
     "Lidiya — farewell messages",
     `Exported: ${new Date().toISOString()}`,
