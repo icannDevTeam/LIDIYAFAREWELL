@@ -461,9 +461,9 @@ export default function DisplayPage() {
         </div>
       )}
 
-      {/* Footer credits: Albert bottom-left, Lidiya bottom-right */}
+      {/* Footer credits: Albert & Linnea bottom-left, Lidiya bottom-right */}
       <p className="absolute bottom-6 left-8 z-30 text-[10px] tracking-[0.3em] uppercase text-sunset-100/35">
-        © 2026 · Built and designed by Albert
+        © 2026 · Made by Albert & Linnea
       </p>
       <p className="absolute bottom-6 right-8 z-30 text-[10px] tracking-[0.35em] uppercase text-sunset-100/45">
         With love · for Lidiya

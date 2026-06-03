@@ -15,6 +15,10 @@ function safeEqual(a: string, b: string) {
   return out === 0;
 }
 
+function normalizeEmail(v: string) {
+  return String(v || "").trim().toLowerCase();
+}
+
 async function loadMessages(): Promise<AdminMessage[]> {
   const db = getAdminDb();
   const snap = await db.collection("messages").orderBy("createdAt", "desc").get();
@@ -37,12 +41,12 @@ async function loadMessages(): Promise<AdminMessage[]> {
 }
 
 export default async function AdminPage() {
-  const token = cookies().get("admin_token")?.value || "";
-  const expected = process.env.ADMIN_TOKEN || "";
-  if (!expected || !safeEqual(token, expected)) {
+  const adminEmail = normalizeEmail(cookies().get("admin_email")?.value || "");
+  const expected = normalizeEmail(process.env.ADMIN_EMAIL || "");
+  if (!expected || !safeEqual(adminEmail, expected)) {
     redirect("/admin/login");
   }
 
   const messages = await loadMessages();
-  return <AdminGallery messages={messages} adminToken={token} />;
+  return <AdminGallery messages={messages} adminEmail={adminEmail} />;
 }

@@ -22,19 +22,19 @@ export default function AdminLogin({
         <h1 className="font-serif text-3xl text-stone-800 text-center mb-6">Host Dashboard</h1>
 
         <label className="block text-xs uppercase tracking-wider text-stone-500 mb-2">
-          Admin token
+          Enter email for Lidiya
         </label>
         <input
-          name="token"
-          type="password"
+          name="email"
+          type="email"
           required
           autoFocus
-          autoComplete="off"
+          autoComplete="email"
           className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-800 focus:outline-none focus:border-amber-500"
         />
 
         {error && (
-          <p className="mt-3 text-sm text-rose-600">Wrong token — try again.</p>
+          <p className="mt-3 text-sm text-rose-600">This email is not authorized.</p>
         )}
 
         <button
@@ -45,7 +45,7 @@ export default function AdminLogin({
         </button>
 
         <p className="mt-4 text-xs text-stone-400 text-center">
-          The token is set in <code>ADMIN_TOKEN</code>.
+          Allowed access email is set in <code>ADMIN_EMAIL</code>.
         </p>
       </form>
     </main>

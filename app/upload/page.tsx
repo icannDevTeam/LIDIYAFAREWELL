@@ -317,7 +317,7 @@ export default function UploadPage() {
         <div className="mx-auto h-px w-16 bg-gradient-to-r from-transparent via-sunset-300/40 to-transparent" />
         <div className="mt-3 flex items-center justify-between gap-4 text-[10px] tracking-[0.3em] uppercase">
           <p className="text-sunset-100/30">
-            © 2026 · Albert
+            © 2026 · Made by Albert & Linnea
           </p>
           <p className="text-sunset-100/45 tracking-[0.35em]">
             With love · for Lidiya

@@ -28,10 +28,10 @@ const NEW_THRESHOLD_MS = 60 * 60 * 1000; // 1 hour
 
 export default function AdminGallery({
   messages: initial,
-  adminToken,
+  adminEmail,
 }: {
   messages: AdminMessage[];
-  adminToken: string;
+  adminEmail: string;
 }) {
   const [messages, setMessages] = useState(initial);
   const [view, setView] = useState<View>("gallery");
@@ -124,7 +124,7 @@ export default function AdminGallery({
     try {
       const res = await fetch(`/api/admin/messages/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${adminToken}` },
+        headers: { Authorization: `Bearer ${adminEmail}` },
       });
       if (!res.ok) throw new Error(`Delete failed (${res.status})`);
       setMessages((prev) => prev.filter((m) => m.id !== id));
@@ -147,7 +147,7 @@ export default function AdminGallery({
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${adminToken}`,
+          Authorization: `Bearer ${adminEmail}`,
         },
         body: JSON.stringify({ hidden: next }),
       });
@@ -285,13 +285,6 @@ export default function AdminGallery({
             </button>
           )}
           {query && <span>· {filtered.length} match{filtered.length === 1 ? "" : "es"}</span>}
-          <span className="opacity-50">·</span>
-          <a href="/display" target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">
-            Open TV display
-          </a>
-          <a href="/qr" target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">
-            Open QR poster
-          </a>
           <a href="/upload" target="_blank" rel="noreferrer" className="text-amber-700 hover:underline">
             Open upload page
           </a>
@@ -451,7 +444,7 @@ export default function AdminGallery({
 
       <footer className="no-print mt-4 px-6 py-6 flex items-center justify-between text-xs text-stone-400 border-t border-stone-200">
         <p className="tracking-wide">
-          © 2026 · Built and designed by Albert
+          © 2026 · Made by Albert & Linnea
         </p>
         <p className="font-script text-sm text-stone-500">made with love · for Lidiya</p>
       </footer>

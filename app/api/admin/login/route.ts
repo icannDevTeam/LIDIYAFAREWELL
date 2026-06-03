@@ -10,16 +10,20 @@ function safeEqual(a: string, b: string) {
   return out === 0;
 }
 
+function normalizeEmail(v: string) {
+  return String(v || "").trim().toLowerCase();
+}
+
 export async function POST(req: NextRequest) {
   const form = await req.formData();
-  const token = String(form.get("token") || "");
-  const expected = process.env.ADMIN_TOKEN || "";
-  if (!expected || !safeEqual(token, expected)) {
+  const email = normalizeEmail(String(form.get("email") || ""));
+  const expected = normalizeEmail(process.env.ADMIN_EMAIL || "");
+  if (!expected || !safeEqual(email, expected)) {
     const url = new URL("/admin/login?error=1", req.url);
     return NextResponse.redirect(url, { status: 303 });
   }
   const res = NextResponse.redirect(new URL("/admin", req.url), { status: 303 });
-  res.cookies.set("admin_token", token, {
+  res.cookies.set("admin_email", email, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -31,6 +35,6 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const res = NextResponse.json({ ok: true });
-  res.cookies.set("admin_token", "", { path: "/", maxAge: 0 });
+  res.cookies.set("admin_email", "", { path: "/", maxAge: 0 });
   return res;
 }

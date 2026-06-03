@@ -5,13 +5,17 @@ import { COLLECTION } from "@/lib/firebase";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function normalizeEmail(v: string) {
+  return String(v || "").trim().toLowerCase();
+}
+
 function isAuthorized(req: NextRequest): boolean {
-  const expected = process.env.ADMIN_TOKEN;
+  const expected = normalizeEmail(process.env.ADMIN_EMAIL || "");
   if (!expected) return false;
   const header = req.headers.get("authorization") || "";
-  const token = header.startsWith("Bearer ") ? header.slice(7) : header;
+  const email = normalizeEmail(header.startsWith("Bearer ") ? header.slice(7) : header);
   // Constant-time compare via Buffer to avoid timing attacks.
-  const a = Buffer.from(token);
+  const a = Buffer.from(email);
   const b = Buffer.from(expected);
   if (a.length !== b.length) return false;
   let diff = 0;
@@ -22,7 +26,7 @@ function isAuthorized(req: NextRequest): boolean {
 /**
  * DELETE /api/admin/messages/:id
  *   Removes the Firestore document and its associated Storage object.
- *   Requires header:  Authorization: Bearer <ADMIN_TOKEN>
+ *   Requires header:  Authorization: Bearer <ADMIN_EMAIL>
  */
 export async function DELETE(
   req: NextRequest,
